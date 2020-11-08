@@ -96,7 +96,7 @@ public class NonLeafNode<K extends Comparable<K>, P> extends Node<K, P> {
 		int idx = childIndex( k);
 		int left = idx-1;
 		if( left<0) {
-			left=idx+1;
+			left=idx;
 		}
 		return key(left);
 	}
@@ -262,7 +262,7 @@ public class NonLeafNode<K extends Comparable<K>, P> extends Node<K, P> {
 	public boolean isUnderUtilized() {
 		boolean retval =false;
 		int min = (int)Math.ceil(pointers.length/2.0) ;
-		if( keyCount()>=min){
+		if( keyCount()<min){
 			retval =true;
 		}
 		return retval;

@@ -165,7 +165,7 @@ public class LeafNode<K extends Comparable<K>, P> extends Node<K, P> {
 		boolean retval =false;
 		
 		int min = (int) Math.ceil(keys.length/2.0);		
-		if( keyCount>=min) {
+		if( keyCount<min) {
 			retval =true;
 		}
 		return retval;

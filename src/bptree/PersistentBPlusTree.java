@@ -351,11 +351,13 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	@Override
 	public void delete(K k) throws InvalidDeletionException, IOException {
 		// please implement the body of this method
-		HashMap<Node<K, P>, NonLeafNode<K, P>> node2parent = new HashMap<Node<K, P>, NonLeafNode<K, P>>();
+		Map<Node<K, P>, NonLeafNode<K, P>> node2parent = new HashMap<Node<K, P>, NonLeafNode<K, P>>();
 		Map<Node<K, P>, P> node2pointer = new HashMap<Node<K, P>, P>();
 		Node<K, P> root = root(node2pointer);
 		LeafNode<K, P> l = find(k, root, node2parent, node2pointer);
 		delete_entry((Node<K, ?>)l,k, node2parent, node2pointer);
+		//                        Map<Node<K, P>, NonLeafNode<K, P>> 
+		//                        Map<Node<K, ?>, NonLeafNode<K, Node<K, ?>>> 
 //delete_entry(Node<K, ?> N, K k, Map<Node<K, ?>, NonLeafNode<K, Node<K, ?>>> node2parent,Map<Node<K, P>, P> node2pointer)
 	}
 
@@ -363,7 +365,8 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	 
 	
 	public void merge(Node<K, P> NPrime, K KPrime, Node<K, P> N,
-			Map<Node<K, ?>, NonLeafNode<K, Node<K, ?>>> node2parent,Map<Node<K, P>, P> node2pointer) throws InvalidDeletionException, IOException {
+			/*Map<Node<K, ?>, NonLeafNode<K, Node<K, ?>>>*/
+			Map<Node<K, P>, NonLeafNode<K, P>> node2parent,Map<Node<K, P>, P> node2pointer) throws InvalidDeletionException, IOException {
 
 		if (N instanceof LeafNode) {
 			LeafNode<K, P> lnN = (LeafNode<K, P>) N;
@@ -376,13 +379,13 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 			nprimelf.append(N, 0, N.keyCount());
 		}
 		save(NPrime, node2pointer);
-		NonLeafNode<K, Node<K, ?>> p = node2parent.get(NPrime);
+		NonLeafNode<K, P> p = node2parent.get(NPrime);
 		delete_entry(p, KPrime, node2parent,node2pointer);
 		delete(N,   node2pointer);
 	}
 	
 	@SuppressWarnings("unchecked")
-	protected void delete_entry(Node<K, ?> N, K k, Map<Node<K, ?>, NonLeafNode<K, Node<K, ?>>> node2parent,Map<Node<K, P>, P> node2pointer)
+	protected void delete_entry(Node<K, ?> N, K k, /*Map<Node<K, ?>,  NonLeafNode<K, Node<K, ?>>>*/Map<Node<K, P>, NonLeafNode<K, P>>   node2parent,Map<Node<K, P>, P> node2pointer)
 			throws InvalidDeletionException, IOException {
 			N.remove(k);// this completes trivial deletion at leaf nodes
 			

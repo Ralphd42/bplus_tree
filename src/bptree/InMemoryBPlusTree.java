@@ -302,6 +302,7 @@ public class InMemoryBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K, 
 			//NonLeafNode<K, P> nlf = (NonLeafNode<K, P>) N;
 			NonLeafNode<K, P> nprimelf = (NonLeafNode<K, P>) NPrime;
 			nprimelf.insert(KPrime, nprimelf.keyCount(), null, nprimelf.keyCount() + 1);
+			nprimelf.append(N, 0,N.keyCount());
 		}
 		save(NPrime);
 		NonLeafNode<K, Node<K, ?>> p = node2parent.get(NPrime);
