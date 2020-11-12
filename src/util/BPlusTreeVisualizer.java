@@ -114,9 +114,9 @@ public class BPlusTreeVisualizer extends util.ZoomView implements java.awt.event
 	 *             if an error occurs
 	 */
 	public static void main(String[] args) throws Exception {
-		startVisualizer(new InMemoryBPlusTree<String, Integer>(3), "input.txt", System.out, 0, 0);
-		//startVisualizer(new PersistentBPlusTree<String, Integer>(3, storageManager(), 0), "input.txt", System.out, 100,
-		 		//100);
+		//startVisualizer(new InMemoryBPlusTree<String, Integer>(3), "input.txt", System.out, 0, 0);
+		startVisualizer(new PersistentBPlusTree<String, Integer>(3, storageManager(), 0), "input.txt", System.out, 100,
+		 		 100);
 	}
 
 	/**

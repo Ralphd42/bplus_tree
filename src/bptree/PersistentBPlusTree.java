@@ -9,15 +9,14 @@ import storage.StorageManager;
 import storage.StorageManager.InvalidLocationException;
 
 /**
- * The {@code PersistentBPlusTree} class implements B+-trees. Each {@code PersistentBPlusTree} stores its {@code Node}s
- * using a {@code StorageManager}.
+ * The {@code PersistentBPlusTree} class implements B+-trees. Each
+ * {@code PersistentBPlusTree} stores its {@code Node}s using a
+ * {@code StorageManager}.
  * 
  * @author Jeong-Hyon Hwang (jhh@cs.albany.edu)
  * 
- * @param <K>
- *            the type of keys
- * @param <P>
- *            the type of pointers
+ * @param <K> the type of keys
+ * @param <P> the type of pointers
  */
 public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K, P> {
 
@@ -34,12 +33,12 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	/**
 	 * Constructs a {@code PersistentBPlusTree}.
 	 * 
-	 * @param degree
-	 *            the maximum number of pointers that each {@code Node} of this {@code PersistentBPlusTree} can have
-	 * @param sm
-	 *            {@code StorageManager} used for this {@code PersistentBPlusTree}
-	 * @param fileID
-	 *            the identifier of the file used for this {@code PersistentBPlusTree}
+	 * @param degree the maximum number of pointers that each {@code Node} of this
+	 *               {@code PersistentBPlusTree} can have
+	 * @param sm     {@code StorageManager} used for this
+	 *               {@code PersistentBPlusTree}
+	 * @param fileID the identifier of the file used for this
+	 *               {@code PersistentBPlusTree}
 	 */
 	public PersistentBPlusTree(int degree, StorageManager<P, Object> sm, int fileID) {
 		super(degree);
@@ -50,10 +49,9 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	/**
 	 * Returns the root {@code Node} of this {@code PersistentBPlusTree}.
 	 * 
-	 * @return the root {@code Node} of this {@code PersistentBPlusTree}; {@code null} if this
-	 *         {@code PersistentBPlusTree} is empty
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @return the root {@code Node} of this {@code PersistentBPlusTree};
+	 *         {@code null} if this {@code PersistentBPlusTree} is empty
+	 * @throws IOException if an I/O error occurs
 	 */
 	@Override
 	public Node<K, ?> root() throws IOException {
@@ -61,15 +59,13 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	}
 
 	/**
-	 * Returns the specified child {@code Node} of the specified {@code NonLeafNode}.
+	 * Returns the specified child {@code Node} of the specified
+	 * {@code NonLeafNode}.
 	 * 
-	 * @param node
-	 *            a {@code NonLeafNode}
-	 * @param i
-	 *            the index of the child {@code Node}
+	 * @param node a {@code NonLeafNode}
+	 * @param i    the index of the child {@code Node}
 	 * @return the specified child {@code Node} of the specified {@code NonLeafNode}
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @throws IOException if an I/O error occurs
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -89,15 +85,13 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	/**
 	 * Inserts the specified key and pointer into this {@code PersistentBPlusTree}.
 	 * 
-	 * @param k
-	 *            the key to insert
-	 * @param p
-	 *            the pointer to insert
-	 * @throws InvalidInsertionException
-	 *             if a key already existent in this {@code PersistentBPlusTree} is attempted to be inserted again in
-	 *             the {@code PersistentBPlusTree}
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @param k the key to insert
+	 * @param p the pointer to insert
+	 * @throws InvalidInsertionException if a key already existent in this
+	 *                                   {@code PersistentBPlusTree} is attempted to
+	 *                                   be inserted again in the
+	 *                                   {@code PersistentBPlusTree}
+	 * @throws IOException               if an I/O error occurs
 	 */
 	@Override
 	public void insert(K k, P p) throws InvalidInsertionException, IOException {
@@ -139,11 +133,11 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	/**
 	 * Returns the root {@code Node}.
 	 * 
-	 * @return the root {@code Node}; {@code null} if this {@code PersistentBPlusTree} is empty
-	 * @param node2pointer
-	 *            a {@code Map} remembering, for each visited {@code Node}, a pointer to that {@code Node}
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @return the root {@code Node}; {@code null} if this
+	 *         {@code PersistentBPlusTree} is empty
+	 * @param node2pointer a {@code Map} remembering, for each visited {@code Node},
+	 *                     a pointer to that {@code Node}
+	 * @throws IOException if an I/O error occurs
 	 */
 	@SuppressWarnings("unchecked")
 	protected Node<K, P> root(Map<Node<K, P>, P> node2pointer) throws IOException {
@@ -163,21 +157,18 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	}
 
 	/**
-	 * Finds the {@code LeafNode} that is a descendant of the specified {@code Node} and must be responsible for the
-	 * specified key.
+	 * Finds the {@code LeafNode} that is a descendant of the specified {@code Node}
+	 * and must be responsible for the specified key.
 	 * 
-	 * @param k
-	 *            a search key
-	 * @param n
-	 *            a {@code Node}
-	 * @param node2parent
-	 *            a {@code Map} to remember, for each visited {@code Node}, the parent of that {@code Node}
-	 * @param node2pointer
-	 *            a {@code Map} remembering, for each visited {@code Node}, a pointer to that {@code Node}
-	 * @return the {@code LeafNode} which is a descendant of the specified {@code Node} and must be responsible for the
-	 *         specified key
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @param k            a search key
+	 * @param n            a {@code Node}
+	 * @param node2parent  a {@code Map} to remember, for each visited {@code Node},
+	 *                     the parent of that {@code Node}
+	 * @param node2pointer a {@code Map} remembering, for each visited {@code Node},
+	 *                     a pointer to that {@code Node}
+	 * @return the {@code LeafNode} which is a descendant of the specified
+	 *         {@code Node} and must be responsible for the specified key
+	 * @throws IOException if an I/O error occurs
 	 */
 	protected LeafNode<K, P> find(K k, Node<K, P> n, Map<Node<K, P>, NonLeafNode<K, P>> node2parent,
 			Map<Node<K, P>, P> node2pointer) throws IOException {
@@ -191,22 +182,18 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	}
 
 	/**
-	 * Inserts the specified key into the parent {@code Node} of the specified {@code Nodes}.
+	 * Inserts the specified key into the parent {@code Node} of the specified
+	 * {@code Nodes}.
 	 * 
-	 * @param n
-	 *            a {@code Node}
-	 * @param k
-	 *            the key between the {@code Node}s
-	 * @param np
-	 *            a {@code Node}
-	 * @param root
-	 *            the root {@code Node}
-	 * @param node2parent
-	 *            a {@code Map} remembering, for each visited {@code Node}, the parent of that {@code Node}
-	 * @param node2pointer
-	 *            a {@code Map} remembering, for each visited {@code Node}, a pointer to that {@code Node}
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @param n            a {@code Node}
+	 * @param k            the key between the {@code Node}s
+	 * @param np           a {@code Node}
+	 * @param root         the root {@code Node}
+	 * @param node2parent  a {@code Map} remembering, for each visited {@code Node},
+	 *                     the parent of that {@code Node}
+	 * @param node2pointer a {@code Map} remembering, for each visited {@code Node},
+	 *                     a pointer to that {@code Node}
+	 * @throws IOException if an I/O error occurs
 	 */
 	protected void insertInParent(Node<K, P> n, K k, Node<K, P> np, Node<K, P> root,
 			Map<Node<K, P>, NonLeafNode<K, P>> node2parent, Map<Node<K, P>, P> node2pointer) throws IOException {
@@ -238,10 +225,8 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	/**
 	 * Saves the specified {@code Node} as the new root {@code Node} on storage.
 	 * 
-	 * @param n
-	 *            a {@code Node}
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @param n a {@code Node}
+	 * @throws IOException if an I/O error occurs
 	 */
 	protected void setRoot(Node<K, P> n) throws IOException {
 		P p = sm.add(fileID, n);
@@ -255,10 +240,8 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	/**
 	 * Saves the specified pointer on storage as a pointer to the root {@code Node}.
 	 * 
-	 * @param p
-	 *            a pointer to a {@code Node}
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @param p a pointer to a {@code Node}
+	 * @throws IOException if an I/O error occurs
 	 */
 	protected void setRoot(P p) throws IOException {
 		try {
@@ -271,12 +254,10 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	/**
 	 * Saves the specified {@code Node} on storage.
 	 * 
-	 * @param n
-	 *            a {@code Node}
-	 * @param node2pointer
-	 *            a {@code Map} remembering, for each visited {@code Node}, a pointer to that {@code Node}
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @param n            a {@code Node}
+	 * @param node2pointer a {@code Map} remembering, for each visited {@code Node},
+	 *                     a pointer to that {@code Node}
+	 * @throws IOException if an I/O error occurs
 	 */
 	protected P save(Node<K, P> n, Map<Node<K, P>, P> node2pointer) throws IOException {
 		P p = node2pointer.get(n);
@@ -295,12 +276,10 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	/**
 	 * Removes the specified {@code Node} on storage.
 	 * 
-	 * @param n
-	 *            the {@code Node} to remove
-	 * @param node2pointer
-	 *            a {@code Map} remembering, for each visited {@code Node}, a pointer to that {@code Node}
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @param n            the {@code Node} to remove
+	 * @param node2pointer a {@code Map} remembering, for each visited {@code Node},
+	 *                     a pointer to that {@code Node}
+	 * @throws IOException if an I/O error occurs
 	 */
 	protected void delete(Node<K, P> n, Map<Node<K, P>, P> node2pointer) throws IOException {
 		try {
@@ -313,13 +292,11 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	/**
 	 * Returns the specified {@code Node}.
 	 * 
-	 * @param p
-	 *            a pointer to the {@code Node} to reference
-	 * @param node2pointer
-	 *            a {@code Map} remembering, for each visited {@code Node}, a pointer to that {@code Node}
+	 * @param p            a pointer to the {@code Node} to reference
+	 * @param node2pointer a {@code Map} remembering, for each visited {@code Node},
+	 *                     a pointer to that {@code Node}
 	 * @return the specified {@code Node}
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @throws IOException if an I/O error occurs
 	 */
 	@SuppressWarnings("unchecked")
 	protected Node<K, P> node(P p, Map<Node<K, P>, P> node2pointer) throws IOException {
@@ -338,15 +315,15 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 	}
 
 	/**
-	 * Removes the specified key and the corresponding pointer from this {@code PersistentBPlusTree}.
+	 * Removes the specified key and the corresponding pointer from this
+	 * {@code PersistentBPlusTree}.
 	 * 
-	 * @param k
-	 *            the key to delete
-	 * @throws InvalidDeletionException
-	 *             if a key non-existent in a {@code PersistentBPlusTree} is attempted to be deleted from the
-	 *             {@code PersistentBPlusTree}
-	 * @throws IOException
-	 *             if an I/O error occurs
+	 * @param k the key to delete
+	 * @throws InvalidDeletionException if a key non-existent in a
+	 *                                  {@code PersistentBPlusTree} is attempted to
+	 *                                  be deleted from the
+	 *                                  {@code PersistentBPlusTree}
+	 * @throws IOException              if an I/O error occurs
 	 */
 	@Override
 	public void delete(K k) throws InvalidDeletionException, IOException {
@@ -355,59 +332,88 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 		Map<Node<K, P>, P> node2pointer = new HashMap<Node<K, P>, P>();
 		Node<K, P> root = root(node2pointer);
 		LeafNode<K, P> l = find(k, root, node2parent, node2pointer);
-		delete_entry((Node<K, ?>)l,k, node2parent, node2pointer);
-		//                        Map<Node<K, P>, NonLeafNode<K, P>> 
-		//                        Map<Node<K, ?>, NonLeafNode<K, Node<K, ?>>> 
+		delete_entry((Node<K, ?>) l, k, node2parent, node2pointer);
+		// Map<Node<K, P>, NonLeafNode<K, P>>
+		// Map<Node<K, ?>, NonLeafNode<K, Node<K, ?>>>
 //delete_entry(Node<K, ?> N, K k, Map<Node<K, ?>, NonLeafNode<K, Node<K, ?>>> node2parent,Map<Node<K, P>, P> node2pointer)
 	}
 
-	 
-	 
-	
+	/**
+	 * Merges nodes
+	 * 
+	 * @param NPrime       Node to merge with
+	 * @param KPrime       pointer between nodes
+	 * @param N            Node to merge and remove
+	 * @param node2parent  map to parents
+	 * @param node2pointer map to pointers
+	 * @throws InvalidDeletionException
+	 * @throws IOException
+	 */
 	public void merge(Node<K, P> NPrime, K KPrime, Node<K, P> N,
-			/*Map<Node<K, ?>, NonLeafNode<K, Node<K, ?>>>*/
-			Map<Node<K, P>, NonLeafNode<K, P>> node2parent,Map<Node<K, P>, P> node2pointer) throws InvalidDeletionException, IOException {
+			Map<Node<K, P>, NonLeafNode<K, P>> node2parent, Map<Node<K, P>, P> node2pointer)
+			throws InvalidDeletionException, IOException {
 
-		if (N instanceof LeafNode) {
+		if (N instanceof LeafNode) {// leaf node case
 			LeafNode<K, P> lnN = (LeafNode<K, P>) N;
 			LeafNode<K, P> lnNPrime = (LeafNode<K, P>) NPrime;
-			NPrime.append(N, 0, N.keyCount());
+			if (N.keyCount() > 0) {
+				NPrime.append(N, 0, N.keyCount()-1);
+			}
 			lnNPrime.setSuccessor(lnN.successor());
-		} else {
+		} else { // non leaf node case
 			NonLeafNode<K, P> nprimelf = (NonLeafNode<K, P>) NPrime;
-			nprimelf.insert(KPrime, nprimelf.keyCount(), null, nprimelf.keyCount() + 1);
-			nprimelf.append(N, 0, N.keyCount());
+			nprimelf.appendKey(KPrime); // append KPrime
+			if (N.keyCount() > 0) { // if N has Keys merge
+				nprimelf.append(N, 0, N.keyCount());
+			} else { // check for pointer in N
+				if (N.pointer(0) != null) {
+					nprimelf.pointers[nprimelf.keyCount()] = N.pointer(0);
+				}
+			}
 		}
-		save(NPrime, node2pointer);
-		NonLeafNode<K, P> p = node2parent.get(NPrime);
-		delete_entry(p, KPrime, node2parent,node2pointer);
-		delete(N,   node2pointer);
+		save(NPrime, node2pointer); // save NPrime
+		NonLeafNode<K, P> p = node2parent.get(N); // get parent
+		delete_entry(p, KPrime, node2parent, node2pointer); // delete KPrime from parent
+		delete(N, node2pointer); // Delete N
 	}
-	
+
+	/**
+	 * 
+	 * @param N
+	 * @param k
+	 * @param node2parent
+	 * @param node2pointer
+	 * @throws InvalidDeletionException
+	 * @throws IOException
+	 */
 	@SuppressWarnings("unchecked")
-	protected void delete_entry(Node<K, ?> N, K k, /*Map<Node<K, ?>,  NonLeafNode<K, Node<K, ?>>>*/Map<Node<K, P>, NonLeafNode<K, P>>   node2parent,Map<Node<K, P>, P> node2pointer)
-			throws InvalidDeletionException, IOException {
-			N.remove(k);// this completes trivial deletion at leaf nodes
-			
-			Node<K, P> root = root(node2pointer);  // get the root
-			if (N.equals(root)) { // Handle the root case
+	protected void delete_entry(Node<K, ?> N, K k, Map<Node<K, P>, NonLeafNode<K, P>> node2parent,
+			Map<Node<K, P>, P> node2pointer) throws InvalidDeletionException, IOException {
+		N.remove(k);// this completes trivial deletion at leaf nodes
+
+		Node<K, P> root = root(node2pointer); // get the root
+		if (N.equals(root)) { // Handle the root case
 			if ((N instanceof NonLeafNode) && ((NonLeafNode<K, ?>) N).childCount() == 1) {// if root has 1 child
-				  
-				setRoot((Node<K,P>)child(((NonLeafNode<K, ?>) N), 0));// set root to child
+
+				setRoot((Node<K, P>) child(((NonLeafNode<K, ?>) N), 0));// set root to child
 			} else {
-				save((Node<K,P>)N,node2pointer); // save N
+				save((Node<K, P>) N, node2pointer); // save N
 			}
 		} else if (N.isUnderUtilized()) {
+			find(k, root, node2parent, node2pointer);// this is redundant.  Am working out a bug
 			NonLeafNode<K, ?> P = (NonLeafNode<K, ?>) node2parent.get(N);// get parent
-			Node<K, P> NPrime = (Node<K, P>) P.leftPointer(k); // get left node. If left isn't available get right node
+			Node<K, P> NPrime = (Node<K, P>) child(P, P.leftIndex(k));    // P.leftPointer(k); // get left node. If left isn't available get right node
+			 
 			K KPrime = P.leftKey(k);// get key between the nodes
+			find(KPrime, root, node2parent, node2pointer);  // find KPrime to get parent information into maps
+			node2parent.put(NPrime, (NonLeafNode<K, P>) P);// this is a part of debugging
 			// check for merge able
 			if (((Node<K, P>) N).mergeable((Node<K, P>) NPrime)) {// nodes can be merged
 				if (P.IsleftKey(k)) {
-					merge(NPrime, KPrime, (Node<K, P>) N, node2parent,node2pointer);
+					merge(NPrime, KPrime, (Node<K, P>) N, node2parent, node2pointer);
 
 				} else {
-					merge((Node<K, P>) N, KPrime, NPrime, node2parent,node2pointer);
+					merge((Node<K, P>) N, KPrime, NPrime, node2parent, node2pointer);
 				}
 			} else {// nodes must be redistributed
 				if (P.IsleftKey(k)) {// NPrime is predecessor of N
@@ -427,7 +433,7 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 					}
 
 				} else {// N is predecessor of NPrime
-					// NPrime is predecessor of N 
+					// NPrime is predecessor of N
 					if (NPrime instanceof NonLeafNode) {// non leaf node case
 						int m = ((NonLeafNode<K, ?>) N).childCount() - 1; // index of last pointer in NPrime
 						((NonLeafNode<K, P>) NPrime).insert(KPrime, 0, (P) ((NonLeafNode<K, ?>) N).pointer(m), 0);
@@ -447,16 +453,9 @@ public class PersistentBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K
 			}
 
 		} else {
-			save((Node<K,P>)N, node2pointer);
+			save((Node<K, P>) N, node2pointer);
 		}
 
 	}
-
-	
-	
-	
-	
-	
-	
 
 }

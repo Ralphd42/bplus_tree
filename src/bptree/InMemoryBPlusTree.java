@@ -205,27 +205,11 @@ public class InMemoryBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K, 
 		HashMap<Node<K, ?>, NonLeafNode<K, Node<K, ?>>> node2parent = new HashMap<Node<K, ?>, NonLeafNode<K, Node<K, ?>>>();
 		Node<K, ?> l = find(k, root, node2parent);
 		delete_entry(l, k, node2parent);
-		/**
-		 * if(!((LeafNode<K, ?>)l).contains(k))// check for existence of key {
-		 * l.remove(k); // remove key }else { throw new InvalidDeletionException("Key
-		 * doesn't exist");// throw exception. }
-		 */
-		//
-		// this completes trivial case
-		// test for underutilized leaf
-
 	}
 
 	@SuppressWarnings("unchecked")
 	protected void delete_entry(Node<K, ?> N, K k, Map<Node<K, ?>, NonLeafNode<K, Node<K, ?>>> node2parent)
 			throws InvalidDeletionException, IOException {
-
-		/*
-		 * if( N instanceof LeafNode) // check if N is a leaf node { LeafNode<K,P> lnN =
-		 * (LeafNode<K,P>)N; if(!(lnN.contains(k)))// check for existence of key {
-		 * lnN.remove(k); // remove the key } // this completes trivial deletion at leaf
-		 * nodes }
-		 */
 		N.remove(k);// this completes trivial deletion at leaf nodes
 
 		if (N.equals(root)) { // Handle the root case
@@ -238,6 +222,7 @@ public class InMemoryBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K, 
 			NonLeafNode<K, ?> P = (NonLeafNode<K, ?>) node2parent.get(N);// get parent
 			Node<K, P> NPrime = (Node<K, P>) P.leftPointer(k); // get left node. If left isn't available get right node
 			K KPrime = P.leftKey(k);// get key between the nodes
+			find(KPrime, root, node2parent);
 			// check for merge able
 			if (((Node<K, P>) N).mergeable((Node<K, P>) NPrime)) {// nodes can be merged
 				if (P.IsleftKey(k)) {
@@ -264,7 +249,7 @@ public class InMemoryBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K, 
 					}
 
 				} else {// N is predecessor of NPrime
-					// NPrime is predecessor of N 
+					// NPrime is predecessor of N
 					if (NPrime instanceof NonLeafNode) {// non leaf node case
 						int m = ((NonLeafNode<K, ?>) N).childCount() - 1; // index of last pointer in NPrime
 						((NonLeafNode<K, P>) NPrime).insert(KPrime, 0, (P) ((NonLeafNode<K, ?>) N).pointer(m), 0);
@@ -289,24 +274,36 @@ public class InMemoryBPlusTree<K extends Comparable<K>, P> extends BPlusTree<K, 
 
 	}
 
-	 
 	public void merge(Node<K, P> NPrime, K KPrime, Node<K, P> N,
 			Map<Node<K, ?>, NonLeafNode<K, Node<K, ?>>> node2parent) throws InvalidDeletionException, IOException {
 
 		if (N instanceof LeafNode) {
 			LeafNode<K, P> lnN = (LeafNode<K, P>) N;
 			LeafNode<K, P> lnNPrime = (LeafNode<K, P>) NPrime;
-			NPrime.append(N, 0, N.keyCount());
+			if (N.keyCount() > 0) {
+				NPrime.append(N, 0, N.keyCount());
+			}
 			lnNPrime.setSuccessor(lnN.successor());
 		} else {
-			//NonLeafNode<K, P> nlf = (NonLeafNode<K, P>) N;
+			// NonLeafNode<K, P> nlf = (NonLeafNode<K, P>) N;
 			NonLeafNode<K, P> nprimelf = (NonLeafNode<K, P>) NPrime;
-			nprimelf.insert(KPrime, nprimelf.keyCount(), null, nprimelf.keyCount() + 1);
-			nprimelf.append(N, 0,N.keyCount());
+			// nprimelf.insert(KPrime, nprimelf.keyCount(), null, nprimelf.keyCount() );
+			nprimelf.appendKey(KPrime);
+			// add all n
+			if (N.keyCount > 0) {
+				nprimelf.append(N, 0, N.keyCount());
+			} else {
+				// why
+				if (N.pointer(0) != null) {
+					nprimelf.pointers[nprimelf.keyCount()] = N.pointer(0);
+
+				}
+			}
 		}
 		save(NPrime);
-		NonLeafNode<K, Node<K, ?>> p = node2parent.get(NPrime);
+		NonLeafNode<K, Node<K, ?>> p = node2parent.get(N);
 		delete_entry(p, KPrime, node2parent);
+		delete(N);
 
 	}
 }
